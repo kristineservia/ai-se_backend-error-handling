@@ -13,13 +13,17 @@ const getUserById: RequestHandler = (req, res) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
-    throw new Error(`"${req.params.id}" is not a valid user ID`);
+    throw Object.assign(new Error(`"${req.params.id}" is not a valid user ID`),
+     { statusCode: 400 },
+   );
   }
 
   const user = users.find((u) => u.id === id) ?? null;
 
   if (!user) {
-    throw new Error(`User with ID ${id} not found`);
+    throw Object.assign(new Error(`User with ID ${id} not found`),
+    { statusCode: 404 },
+   );
   }
 
   res.status(200).json({ success: true, data: user, error: null });
